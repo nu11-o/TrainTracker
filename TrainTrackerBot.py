@@ -23,7 +23,7 @@ def searchFunction(classNumber):
     headcodeList = []
     if classNumber == 455:
         headcodeList = headcodeListClass455
-    foundString = '.'
+    foundString = f'Allocations for class {classNumber}s found.'
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" "AppleWebKit/537.36 (KHTML, like Gecko)" "Chrome/120.0 Safari/537.36"}
     if len(headcodeList) > 0:
         for headcode in headcodeList:
@@ -35,7 +35,7 @@ def searchFunction(classNumber):
                 if notFoundString:
                     foundBoolean = 0
                 else:
-                    foundString2 = foundString.replace(f'.', f', \nHeadcode: {headcode}, link: {link}')
+                    foundString2 = foundString.replace(f'.', f', \nHeadcode: {headcode}, link: {link}.')
                     foundString = foundString2
                     print(f'Found! Headcode: {headcode}, link: {link}')
                     foundBoolean = 1
@@ -44,11 +44,11 @@ def searchFunction(classNumber):
     else:
         foundBoolean = 2
     if foundBoolean == 0:
-        message = f'There are currently no current allocations for Class {classNumber}.'
+        message = f'There are no current allocations for class {classNumber}s.'
     elif foundBoolean == 1:
         message = foundString
     elif foundBoolean == 2:
-        message = f'My database currently does not have any headcodes for Class {classNumber}.\n\nIf you would for it to be added, please DM me on discord (@bluebananaaa) with a list of all the headcodes and a source.'
+        message = f'My database currently does not have any headcodes for class {classNumber}s.\n\nIf you would for it to be added, please DM me on discord (@bluebananaaa) with a list of all the headcodes and a source.'
     return message
 
 # discord stuff
