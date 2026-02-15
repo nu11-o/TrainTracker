@@ -14,41 +14,45 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents, case_insensitive=True)
 tree = bot.tree
 
+with open("trainUnitNumbers.json", "r") as f:
+    unitNumberDictionary = json.load(f)
+
 foundBoolean = 3
-headcodeListClass455 = ['455705', '455712', '455716', '455717', '455721', '455727', '455732', '455860', '455908']
 
 # function to search for an active train
 def searchFunction(classNumber):
-    global foundBoolean, headcodeListClass455
-    headcodeList = []
-    if classNumber == 455:
-        headcodeList = headcodeListClass455
-    foundString = f'Allocations for class {classNumber}s found.'
+    global foundBoolean
+    unitNumberList = []
+    try:
+        unitNumberList = unitNumberDictionary[f'Class {classNumber}']
+    except KeyError:
+        foundBoolean = 2
+    foundString = f'Allocations for Class no. {classNumber} have been found '
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" "AppleWebKit/537.36 (KHTML, like Gecko)" "Chrome/120.0 Safari/537.36"}
-    if len(headcodeList) > 0:
-        for headcode in headcodeList:
+    if len(unitNumberList) > 0:
+        for unitNumber in unitNumberList:
             try:
-                link = 'https://www.realtimetrains.co.uk/search/handler?qsearch=' + headcode
+                link = 'https://www.realtimetrains.co.uk/search/handler?qsearch=' + unitNumber
                 response = requests.get(link, headers=headers, timeout=10, verify=False)
                 soup = BS(response.text, "html.parser")
                 notFoundString = soup.find_all(string=re.compile('We cannot find any allocations for that rolling stock'))
                 if notFoundString:
                     foundBoolean = 0
                 else:
-                    foundString2 = foundString.replace(f'.', f', \nHeadcode: {headcode}, link: {link}.')
+                    foundString2 = foundString.replace(f' ', f', \nUnit Number: {unitNumber}, link: {link} ')
                     foundString = foundString2
-                    print(f'Found! Headcode: {headcode}, link: {link}')
+                    print(f'Found! Unit Number: {unitNumber}, link: {link}')
                     foundBoolean = 1
             except requests.exceptions.RequestException as e:
-                print(headcode, "-> ERROR:", e)
+                print(unitNumber, "-> ERROR:", e)
     else:
         foundBoolean = 2
     if foundBoolean == 0:
-        message = f'There are no current allocations for class {classNumber}s.'
+        message = f'There are no current allocations for Class no. {classNumber}'
     elif foundBoolean == 1:
         message = foundString
     elif foundBoolean == 2:
-        message = f'My database currently does not have any headcodes for class {classNumber}s.\n\nIf you would for it to be added, please DM me on discord (@bluebananaaa) with a list of all the headcodes and a source.'
+        message = f'My database currently does not have any unit numbers for Class no. {classNumber}\n\nIf you would like for it to be added, please DM me on discord (@bluebananaaa) with a list of all the unit numbers and a source'
     return message
 
 # discord stuff
