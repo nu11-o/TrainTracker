@@ -4,6 +4,7 @@ import json
 from discord.ext import commands
 from discord import app_commands
 import discord
+from dotenv import load_dotenv
 import os
 import aiohttp
 import asyncio
