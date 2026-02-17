@@ -13,7 +13,7 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents, case_insensitive=True)
 tree = bot.tree
 
-with open("trainUnitNumbersTesting.json", "r") as f:
+with open("trainUnitNumbers.json", "r") as f:
     unit_number_dictionary = json.load(f)
 
 # function to search RTT for any active trains
