@@ -22,6 +22,7 @@ foundBoolean = 3
 # function to search for an active train
 def searchFunction(classNumber):
     global foundBoolean
+    foundBoolean = 0
     unitNumberList = []
     try:
         unitNumberList = unitNumberDictionary[f'Class {classNumber}']
@@ -37,7 +38,7 @@ def searchFunction(classNumber):
                 soup = BS(response.text, "html.parser")
                 notFoundString = soup.find_all(string=re.compile('We cannot find any allocations for that rolling stock'))
                 if notFoundString:
-                    foundBoolean = 0
+                    continue
                 else:
                     foundString2 = foundString.replace(f' ', f', \nUnit Number: {unitNumber}, link: {link} ')
                     foundString = foundString2
