@@ -91,19 +91,18 @@ def get_units(class_number):
 async def on_ready():
     await tree.sync()
     print(f"Logged in as {bot.user}")
-    print('TESTING MODE')
 
 @tree.command(name="searchclass", description="Search for a specific train class") # creates the / command
 @app_commands.describe(classnumber="The class number to search for") # description for the / command
 
 async def SearchClass(interaction: discord.Interaction, classnumber: int):
 
+    await interaction.response.defer(ephemeral=False)
+
     results = await searchRTT(classnumber)
 
     if not results:
-        await interaction.response.send_message(
-            f"No allocations found for Class {classnumber}"
-        )
+        message = f"No allocations found for Class {classnumber}"
     else:
         message = ""
         for r in results:
@@ -114,6 +113,6 @@ async def SearchClass(interaction: discord.Interaction, classnumber: int):
                 f"Source: {r['source']}\n\n"
             )
 
-        await interaction.response.send_message(message, ephemeral=False, suppress_embeds=True)
+    await interaction.followup.send(message, ephemeral=False, suppress_embeds=True)
 
 bot.run(os.getenv("TOKEN"))
