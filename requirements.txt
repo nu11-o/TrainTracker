@@ -3,3 +3,4 @@ requests
 urllib3
 discord.py
 python-dotenv
+aiohttp
